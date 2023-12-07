@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IPL Matches Search Result</title>
+  </head>
+  <body>
+    <h1>Indian Premier League Matches Search Result</h1>
+    <form action="{% url 'main:show_search' %}" method="GET">
+        <button type="Submit">Search Again</button>
+    </form>
+    <h3>Results for Query: {{ input }}</h3>
+      {% if is_valid == False %}
+        Input query is invalid. Please try again with the correct syntax.
+      {% else %}
+        {% if not result %}
+          There are no items that match your input query. Please try again.
+        {% else %}
+          {% for item in result %}
+            {{ item.label }}
+            <br>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+  </body>
+</html>
