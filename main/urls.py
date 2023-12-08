@@ -5,5 +5,6 @@ app_name = "main"
 
 urlpatterns = [
     path("", show_search, name="show_search"),
-    path("/result", show_result, name="show_result"),
+    path("result", show_result, name="show_result"),
+    path("info", show_infobox, name="show_infobox")
 ]

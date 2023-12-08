@@ -1,74 +1,32 @@
 from .models import graph
 
 def search_all_in_class(class_keyword):
-    if class_keyword == "cities":
+    if class_keyword == "matches":
         result = graph.query(
             """
-            select distinct ?label where {
-            ?match :city ?city.
-            ?city rdfs:label ?label.
-            } 
-            order by ?team_name
-            """
-        )
-    elif class_keyword == "matches":
-        result = graph.query(
-            """
-            select distinct (substr(str(?match), 22) as ?label) where {
-            ?match :team ?team.
+            select distinct ?iri (substr(str(?iri), 22) as ?label) where {
+            ?iri :team ?team.
             } 
             order by ?label
             """
         )
-    elif class_keyword == "players":
+    else:
+        properties = {
+            "cities": "city",
+            "players": "player_of_match",
+            "teams": "team",
+            "umpire": "umpires",
+            "venues": "venue",
+        }
         result = graph.query(
             """
-            select distinct ?label where {
-            ?match :player_of_match ?player.
-            ?player rdfs:label ?label.
+            select distinct ?iri ?label where {
+            ?match :%s ?iri.
+            ?iri rdfs:label ?label.
             } 
             order by ?label
             """
-        )
-    elif class_keyword == "seasons":
-        result = graph.query(
-            """
-            select distinct ?label where {
-            ?match :season ?label.
-            } 
-            order by ?label
-            """
-        )
-    elif class_keyword == "teams":
-        result = graph.query(
-            """
-            select distinct ?label where {
-            ?match :team ?team.
-            ?team rdfs:label ?label.
-            } 
-            order by ?label
-            """
-        )
-    elif class_keyword == "umpires":
-        result = graph.query(
-            """
-            select distinct ?label where {
-            ?match :umpire ?umpire.
-            ?umpire rdfs:label ?label.
-            } 
-            order by ?label
-            """
-        )
-    else: #  class_keyword == "venues"
-        result = graph.query(
-            """
-            select distinct ?label where {
-            ?match :venue ?venue.
-            ?venue rdfs:label ?label.
-            } 
-            order by ?label
-            """
-        )
+        ) % (properties[class_keyword])
     return result
 
 def search_identifier(identifier):
@@ -77,23 +35,43 @@ def search_identifier(identifier):
         """
         select * where {
         {
-        select distinct ?label where {
-        ?object rdfs:label ?label.
+        select distinct ?iri ?label where {
+        ?iri rdfs:label ?label.
         filter(contains(lcase(?label), "%s"))
         }
         } union {
-        select distinct (substr(str(?match), 22) as ?label) where {
-        ?match :team ?team.
-        filter(contains(lcase(substr(str(?match), 22)), "%s"))
-        }
-        } union {
-        select distinct ?label where {
-        ?match :season ?label.
-        filter(contains(str(?label), "%s"))
+        select distinct ?iri (substr(str(?iri), 22) as ?label) where {
+        ?iri :team ?team.
+        filter(contains(lcase(substr(str(?iri), 22)), "%s"))
         }
         }
         }
         order by ?label
-        """ % (identifier, identifier, identifier)
+        """ % (identifier, identifier)
     )
     return result
+
+def get_iri_details(iri):
+    # find more efficient query
+    iri_properties = graph.query(
+        """
+        select distinct ?property ?iri ?label where {
+        ?object ?property ?iri.
+        filter(str(?object)='%s')
+        ?iri rdfs:label ?label.
+        }
+        order by ?property
+        """ % (iri)
+    )
+    # find more efficient query
+    literal_properties = graph.query(
+        """
+        select distinct ?property ?literal where {
+        ?object ?property ?literal.
+        filter(str(?object)='%s')
+        filter(isliteral(?literal))
+        }
+        order by ?property
+        """ % (iri)
+    )
+    return iri_properties, literal_properties

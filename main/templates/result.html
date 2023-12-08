@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IPL Matches Search Result</title>
+    <title>Search Result: {{ input }}</title>
   </head>
   <body>
     <h1>Indian Premier League Matches Search Result</h1>
@@ -9,17 +9,22 @@
         <button type="Submit">Search Again</button>
     </form>
     <h3>Results for Query: {{ input }}</h3>
-      {% if is_valid == False %}
-        Input query is invalid. Please try again with the correct syntax.
+    {% if is_valid == False %}
+      Input query is invalid. Please try again with the correct syntax.
+    {% else %}
+      {% if not result %}
+        There are no items that match your input query. Please try again.
       {% else %}
-        {% if not result %}
-          There are no items that match your input query. Please try again.
-        {% else %}
-          {% for item in result %}
-            {{ item.label }}
-            <br>
-          {% endfor %}
-        {% endif %}
+        {% for item in result %}
+          <!-- find better way to make link -->
+          <form action="{% url 'main:show_infobox' %}" method="GET">
+            <input type="hidden" id="iri" name="iri" value="{{ item.iri }}">
+            <input type="hidden" id="label" name="label" value="{{ item.label }}">
+            <button type="Submit">{{ item.label }}</button>
+          </form>
+          <br>
+        {% endfor %}
       {% endif %}
+    {% endif %}
   </body>
 </html>
