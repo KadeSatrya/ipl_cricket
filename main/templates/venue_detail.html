@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% if is_valid == False %}
+      <title>No Venue Found</title>
+    {% else %}
+      <title>{{ label }}</title>
+    {% endif %}
+  </head>
+  <body>
+    {% if is_valid == False %}
+      <h1>Invalid IRI</h1>
+      No Venue found with label {{ label }}
+    {% else %}
+    <div>
+        <h1>{{ venue_name }}</h1>
+    </div>
+    <div>
+        Opening Date: {{opening_date}}
+    </div>
+    <div>
+        Country: <a href="{{country_iri}}">{{country_name}}</a>,
+    </div>
+    <div>
+        City: <a href="{{location_iri}}">{{location_name}}</a>
+    </div>
+    <br>
+    <a href="{{ venue_iri }}">More Details</a>
+    <br>
+    {% endif %}
+    <br>
+    <br>
+    <form action="{% url 'main:show_search' %}" method="GET">
+      <button type="Submit">Search Again</button>
+    </form>
+  </body>
+</html>
