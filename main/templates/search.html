@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IPL Matches</title>
+    <title>IPL Matches Search</title>
   </head>
   <body>
     <h1>Indian Premier League Matches Search Box</h1>
-    <form action="{% url 'main:show_result' %}" method="GET">
+
+    <h2>General Search:</h2>
+    <form action="{% url 'main:show_general_result' %}" method="GET">
         <label for="query">Enter query here:</label>
         <input id="query" name="query" type="text">
         <button type="Submit">Search</button>
     </form>
+
     <h3>How to Search:</h3>
     <ul>
-      <li>To find all items in a class, type <b>[class_name]</b> (available class names: "cities", "matches", "players", "seasons", "teams", "umpires", "venues").</li>
+      <li>To find all items in a class, type <b>[class_name]</b> (available class names: "cities", "matches", "players", "teams", "umpires", "venues").</li>
       <li><i>e.g. type [cities] to find all cities recorded in the dataset.</i></li>
       <li>To find items from all classes whose identifier contains a substring, type <b>[substring]</b>.</li>
       <li><i>e.g. type [stadium] to find all items whose name contain the substring "stadium".</i></li>
     </ul>
+
+    <h2>Detailed Search for Matches:</h2>
+    <form action="{% url 'main:show_detailed_result' %}" method="GET">
+      <label for="city">City:</label>
+      <input id="city" name="city" list="cities">
+      <datalist id="cities">
+        {% for city in cities %}
+          <option value="{{ city.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+      <label for="date">Date:</label>
+      <input id="date" name="date" type="date">
+      <br>
+      Duckworth-Lewis Method Applied:
+      <br>
+      <input id="true" name="dl_applied" type="radio" value="1">
+      <label for="true">True</label>
+      <br>
+      <input id="false" name="dl_applied" type="radio" value="0">
+      <label for="false">False</label>
+      <br>
+      <label for="player">Player of Match:</label>
+      <input id="player" name="player" list="players">
+      <datalist id="players">
+        {% for player in players %}
+          <option value="{{ player.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+      <br>
+      <button type="Submit">Search</button>
+    </form>
   </body>
 </html>
