@@ -41,17 +41,18 @@ def get_team_detail_by_label(label):
     query = f"""
     SELECT ?team_iri ?name ?inception ?league ?league_name ?captain ?captain_name
     WHERE {{
-      ?team_iri wdt:P31 wd:Q17376093.
+      ?team_iri wdt:P641 wd:Q5375.
       ?team_iri rdfs:label ?name.
       ?team_iri wdt:P571 ?inception.
       ?team_iri wdt:P118 ?league.
       ?league rdfs:label ?league_name.
-      ?team_iri wdt:P634 ?captain.
-      ?captain rdfs:label ?captain_name.
+      OPTIONAL {{ 
+        ?team_iri wdt:P634 ?captain.
+        OPTIONAL {{ ?captain rdfs:label ?captain_name. FILTER(LANG(?captain_name) = "en") }}
+        }}
       FILTER(REGEX(?name, "{regex_pattern}", "i"))
       FILTER(LANG(?name) = "en")
       FILTER(LANG(?league_name) = "en")
-      FILTER(LANG(?captain_name) = "en")
     }}
     """
     sparql.setQuery(query)
@@ -70,15 +71,17 @@ def get_venue_detail_by_label(label):
     WHERE {{
       ?venue_iri wdt:P31 wd:Q682943.
       ?venue_iri rdfs:label ?name.
-      ?venue_iri wdt:P1619 ?opening_date.
+      OPTIONAL {{?venue_iri wdt:P1619 ?opening_date.}}
       ?venue_iri wdt:P17 ?country.
       ?country rdfs:label ?country_name.
-      ?venue_iri wdt:P276 ?location.
-      ?location rdfs:label ?location_name.
+      OPTIONAL {{ 
+        ?venue_iri wdt:P276 ?location.
+        OPTIONAL {{ ?location rdfs:label ?location_name. FILTER(LANG(?location_name) = "en")}}
+        }}
       FILTER(REGEX(?name, "{regex_pattern}", "i"))
       FILTER(LANG(?name) = "en")
       FILTER(LANG(?country_name) = "en")
-      FILTER(LANG(?location_name) = "en")
+      
     }}
     """
     sparql.setQuery(query)

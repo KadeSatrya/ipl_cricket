@@ -159,13 +159,16 @@ def show_team_detail(request, label):
     query_result = get_team_detail_by_label(label)
     if query_result != None:
         team_iri = query_result['team_iri']['value']
-        captain_iri = query_result['captain']['value']
         league_iri = query_result['league']['value']
         inception = query_result['inception']['value']
         team_name = query_result['name']['value']
         league_name = query_result['league_name']['value']
-        captain_name = query_result['captain_name']['value']
-
+        try:
+            captain_iri = query_result['captain']['value']
+            captain_name = query_result['captain_name']['value']
+        except:
+            captain_iri = ""
+            captain_name = "-"
         date_format = '%Y-%m-%dT%H:%M:%SZ'
         datetime_object = datetime.strptime(inception, date_format)
         inception = datetime_object.strftime('%Y')
@@ -187,17 +190,22 @@ def show_venue_detail(request, label):
     query_result = get_venue_detail_by_label(label)
     if query_result != None:
         venue_iri = query_result['venue_iri']['value']
-        opening_date = query_result['opening_date']['value']
-        location_iri = query_result['location']['value']
         country_iri = query_result['country']['value']
         venue_name = query_result['name']['value']
         country_name = query_result['country_name']['value']
-        location_name = query_result['location_name']['value']
-
-        date_format = '%Y-%m-%dT%H:%M:%SZ'
-        datetime_object = datetime.strptime(opening_date, date_format)
-        opening_date = datetime_object.strftime('%Y')
-        
+        try:
+            location_iri = query_result['location']['value']
+            location_name = query_result['location_name']['value']
+        except:
+            location_iri = ""
+            location_name = "-"
+        try:
+            opening_date = query_result['opening_date']['value']
+            date_format = '%Y-%m-%dT%H:%M:%SZ'
+            datetime_object = datetime.strptime(opening_date, date_format)
+            opening_date = datetime_object.strftime('%Y')
+        except:
+            opening_date = "-"
         context = {
             'venue_iri': venue_iri,
             'opening_date': opening_date,
