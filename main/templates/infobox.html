@@ -17,14 +17,10 @@
         <b>{{ prop_name }}:</b>
         {% if prop_name == "Player Of Match" %}
           <a href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Team" %}
+        {% elif prop_name == "Team 1" or prop_name == "Team 2"  or prop_name == "Toss Winner" or prop_name == "Winner" %}
           <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
         {% elif prop_name == "Venue" %}
           <a href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Toss Winner" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Winner" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
         {% else %}
           {{ prop_value }}
         {% endif %}
