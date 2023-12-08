@@ -60,6 +60,7 @@ def show_infobox(request):
         "literal_properties": literal_properties,
         "is_valid": is_valid,
     }
+    print(literal_properties)
     return render(request, 'infobox.html', context)
 
 def show_detailed_result(request):

@@ -2,24 +2,67 @@
 <html>
   <head>
     <title>IPL Matches Search</title>
-  </head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
   <body>
     <h1>Indian Premier League Matches Search Box</h1>
-
-    <h2>General Search:</h2>
-    <form action="{% url 'main:show_general_result' %}" method="GET">
-        <label for="query">Enter query here:</label>
-        <input id="query" name="query" type="text">
-        <button type="Submit">Search</button>
-    </form>
-
-    <h3>How to Search:</h3>
-    <ul>
-      <li>To find all items in a class, type <b>[class_name]</b> (available class names: "cities", "matches", "players", "teams", "umpires", "venues").</li>
-      <li><i>e.g. type [cities] to find all cities recorded in the dataset.</i></li>
-      <li>To find items from all classes whose identifier contains a substring, type <b>[substring]</b>.</li>
-      <li><i>e.g. type [stadium] to find all items whose name contain the substring "stadium".</i></li>
-    </ul>
 
     <h2>Detailed Search for Matches:</h2>
     <form action="{% url 'main:show_detailed_result' %}" method="GET">
