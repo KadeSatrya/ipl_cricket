@@ -1,5 +1,3 @@
-import rdflib
-from rdflib.namespace import XSD
 from .models import graph
 
 def search_all_in_matches():
@@ -49,13 +47,32 @@ def search_identifier(bindings):
 def search_detailed_matches(bindings):
     result = graph.query(
         """
-        select ?iri (substr(str(?iri), 22) as ?label) where {
+        select distinct ?iri (substr(str(?iri), 22) as ?label) where {
         ?iri :city ?city.
         ?city rdfs:label ?city_label.
         ?iri :date ?date_literal.
         ?iri :dl_applied ?dl_literal.
         ?iri :player_of_match ?player.
         ?player rdfs:label ?player_label.
+        ?iri :result ?result_literal.
+        ?iri :season ?season_literal.
+        ?iri :team ?team1.
+        ?team1 rdfs:label ?team1_label.
+        ?iri :team ?team2.
+        ?team2 rdfs:label ?team2_label.
+        ?iri :toss_decision ?toss_decision_literal.
+        ?iri :toss_winner ?toss_winner.
+        ?toss_winner rdfs:label ?toss_winner_label.
+        ?iri :umpire ?umpire1.
+        ?umpire1 rdfs:label ?umpire1_label.
+        ?iri :umpire ?umpire2.
+        ?umpire2 rdfs:label ?umpire2_label.
+        ?iri :venue ?venue.
+        ?venue rdfs:label ?venue_label.
+        ?iri :win_by_amount ?win_by_amount_literal.
+        ?iri :win_by_type ?win_by_type_literal.
+        ?iri :winner ?winner.
+        ?winner rdfs:label ?winner_label.
         } order by ?label
         """
     , initBindings=bindings)
