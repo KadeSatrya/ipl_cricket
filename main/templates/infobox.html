@@ -50,33 +50,24 @@
         <h1>Invalid IRI</h1>
         <p>Data IRI is invalid. Please try again.</p>
     {% else %}
-        <h1>{{ label }}</h1>
-        <div class="property-container">
-            {% for row in iri_properties %}
-                <b>{{ row.property|cut:"https://appname.here/data#" }}:</b>
-                {% if "venue" in row.property|cut:"https://appname.here/data#" %}
-                    <form action="{% url 'main:show_venue_detail' label=row.label %}" method="GET">
-                {% elif "team" in row.property|cut:"https://appname.here/data#" or "toss_winner" in row.property|cut:"https://appname.here/data#" or "winner" in row.property|cut:"https://appname.here/data#" %}
-                    <form action="{% url 'main:show_team_detail' label=row.label %}" method="GET">
-                {% elif "player_of_match" in row.property|cut:"https://appname.here/data#" %}
-                    <form action="{% url 'main:show_player_detail' label=row.label %}" method="GET">
-                {% else %}
-                    <form action="{% url 'main:show_infobox' %}" method="GET">
-                {% endif %}
-                    <input type="hidden" name="iri" value="{{ row.iri }}">
-                    <input type="hidden" name="label" value="{{ row.label }}">
-                    <button class="link-button" type="Submit">{{ row.label }}</button>
-                </form>
-                <br>
-            {% endfor %}
-        </div>
-
-        <div class="property-container">
-            {% for row in literal_properties %}
-                <b>{{ row.property|cut:"https://appname.here/data#" }}:</b> {{ row.literal }}
-                <br>
-            {% endfor %}
-        </div>
+      <h1>{{ label }}</h1>
+      {% for prop_name, prop_value in properties.items %}
+        <b>{{ prop_name }}:</b>
+        {% if prop_name == "Player Of Match" %}
+          <a href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
+        {% elif prop_name == "Team" %}
+          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
+        {% elif prop_name == "Venue" %}
+          <a href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
+        {% elif prop_name == "Toss Winner" %}
+          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
+        {% elif prop_name == "Winner" %}
+          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
+        {% else %}
+          {{ prop_value }}
+        {% endif %}
+        <br>
+      {% endfor %}
     {% endif %}
 
     <br>
