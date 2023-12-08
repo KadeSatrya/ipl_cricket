@@ -1,40 +1,105 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Search Result: {{ input }}</title>
-  </head>
-  <body>
-    <h1>Indian Premier League Matches Search Result</h1>
-    <form action="{% url 'main:show_search' %}" method="GET">
-        <button type="Submit">Search Again</button>
-    </form>
-    <h3>{{ result|length }} results found from query {{ input }}</h3>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Result: {{ input }}</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .column {
+      width: 48%;
+      margin-bottom: 20px;
+      border: 1px solid #CED4DA;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    h1 {
+      color: #007BFF;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    h3 {
+      color: #28A745;
+    }
+
+    .error-message {
+      color: #DC3545;
+    }
+
+    b {
+      color: #007BFF;
+    }
+
+    .teams {
+      color: #6C757D;
+    }
+
+    .details-button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Indian Premier League Matches Search Result</h1>
+  <form action="{% url 'main:show_search' %}" method="GET">
+    <button type="Submit">Search Again</button>
+  </form>
+  <h3>{{ result|length }} results found from query {{ input }}</h3>
+  <div class="container">
     {% if is_valid == False %}
-      Input query is invalid. Please try again with the correct syntax.
+      <p class="error-message">Input query is invalid. Please try again with the correct syntax.</p>
     {% else %}
       {% if not result %}
-        There are no items that match your input query. Please try again.
+        <p>There are no items that match your input query. Please try again.</p>
       {% else %}
         {% for item in result %}
-          <b>{{ item.label }}</b>
-          <br>
-          {% if item.team1_label %}
-            Teams: {{ item.team1_label }} vs {{ item.team2_label }}
+          <div class="column">
+            <b>{{ item.label }}</b>
             <br>
-            Date: {{ item.date_literal }}
-            <br>
-            Winner: {{ item.winner_label }}
-            <br>
-          {% endif %}
-          <!-- find better way to make link -->
-          <form action="{% url 'main:show_infobox' %}" method="GET">
-            <input type="hidden" id="iri" name="iri" value="{{ item.iri }}">
-            <input type="hidden" id="label" name="label" value="{{ item.label }}">
-            <button type="Submit">See Details</button>
-          </form>
-          <br>
+            {% if item.team1_label %}
+              <span class="teams">Teams: {{ item.team1_label }} vs {{ item.team2_label }}</span>
+              <br>
+              <span>Date: {{ item.date_literal }}</span>
+              <br>
+              <span>Winner: {{ item.winner_label }}</span>
+              <br>
+            {% endif %}
+            <form action="{% url 'main:show_infobox' %}" method="GET">
+              <input type="hidden" id="iri" name="iri" value="{{ item.iri }}">
+              <input type="hidden" id="label" name="label" value="{{ item.label }}">
+              <button class="details-button" type="Submit">See Details</button>
+            </form>
+          </div>
         {% endfor %}
       {% endif %}
     {% endif %}
-  </body>
+  </div>
+</body>
 </html>
