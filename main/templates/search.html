@@ -6,22 +6,6 @@
   <body>
     <h1>Indian Premier League Matches Search Box</h1>
 
-    <h2>General Search:</h2>
-    <form action="{% url 'main:show_general_result' %}" method="GET">
-        <label for="query">Enter query here:</label>
-        <input id="query" name="query" type="text">
-        <button type="Submit">Search</button>
-    </form>
-
-    <h3>How to Search:</h3>
-    <ul>
-      <li>To find all items in a class, type <b>[class_name]</b> (available class names: "cities", "matches", "players", "teams", "umpires", "venues").</li>
-      <li><i>e.g. type [cities] to find all cities recorded in the dataset.</i></li>
-      <li>To find items from all classes whose identifier contains a substring, type <b>[substring]</b>.</li>
-      <li><i>e.g. type [stadium] to find all items whose name contain the substring "stadium".</i></li>
-    </ul>
-
-    <h2>Detailed Search for Matches:</h2>
     <form action="{% url 'main:show_detailed_result' %}" method="GET">
       
       <label for="city">City:</label>

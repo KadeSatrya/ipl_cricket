@@ -12,27 +12,6 @@ def search_all_in_class(bindings):
     , initBindings=bindings)
     return result
 
-def search_identifier(bindings):
-    result = graph.query(
-        """
-        select * where {
-        {
-        select distinct ?iri ?label where {
-        ?iri rdfs:label ?label.
-        filter(contains(lcase(?label), ?identifier))
-        }
-        } union {
-        select distinct ?iri (substr(str(?iri), 22) as ?label) where {
-        ?iri :team ?team.
-        filter(contains(lcase(substr(str(?iri), 22)), ?identifier))
-        }
-        }
-        }
-        order by ?label
-        """
-    , initBindings=bindings)
-    return result
-
 def search_detailed_matches(bindings):
     keys = bindings.keys()
     team_query = "|| ?team2_label < ?team1_label"
@@ -136,8 +115,8 @@ def search_detailed_matches(bindings):
 def get_iri_details(bindings):
     iri_properties = graph.query(
         """
-        select distinct ?property ?iri ?label where {
-        ?object ?property ?iri.
+        select distinct (substr(str(?prop), 27) as ?property) ?label where {
+        ?object ?prop ?iri.
         ?iri rdfs:label ?label.
         }
         order by ?property
@@ -145,9 +124,9 @@ def get_iri_details(bindings):
     , initBindings=bindings)
     literal_properties = graph.query(
         """
-        select distinct ?property ?literal where {
-        ?object ?property ?literal.
-        filter(isliteral(?literal))
+        select distinct (substr(str(?prop), 27) as ?property) ?label where {
+        ?object ?prop ?label.
+        filter(isliteral(?label))
         }
         order by ?property
         """
