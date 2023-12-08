@@ -22,7 +22,7 @@ def show_general_result(request):
     if input == None or input == "":
         return redirect("main:show_search")
     if len(input.split()) == 1 and input == "matches":
-        result = search_all_in_matches()
+        result = search_detailed_matches({})
     elif len(input.split()) == 1 and input in properties.keys():
         bindings = {"property": URIRef(properties[input])}
         result = search_all_in_class(bindings) 
