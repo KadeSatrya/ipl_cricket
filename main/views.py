@@ -2,6 +2,8 @@ from django.shortcuts import redirect, render
 from rdflib import Literal, URIRef
 from rdflib.namespace import XSD
 from .queries import *
+from .remote_queries import *
+from datetime import datetime
 
 properties = {
     "cities": "https://appname.here/data#city",
@@ -117,3 +119,97 @@ def show_detailed_result(request):
         "is_valid": is_valid,
     }
     return render(request, 'result.html', context)
+
+def show_player_detail(request, label):
+    context = {'is_valid': False, 'label': label} 
+    query_result = get_player_detail_by_label(label)
+    if query_result != None:
+        player_iri = query_result['player_iri']['value']
+        name = query_result['name']['value']
+        gender = query_result['gender']['value']
+        citizenship = query_result['citizenship']['value']
+        birthdate = query_result['birthdate']['value']
+        birthplace = query_result['birthplace']['value']
+        country_name = query_result['country_name']['value']
+        birthplace_name = query_result['birthplace_name']['value']
+        teams = [iri.strip() for iri in query_result['teams']['value'].split(',')]
+        team_names = [name.strip() for name in query_result['team_names']['value'].split(',')]
+        
+        team_list = zip(teams, team_names)
+        
+        date_format = '%Y-%m-%dT%H:%M:%SZ'
+        datetime_object = datetime.strptime(birthdate, date_format)
+        birthdate = datetime_object.strftime('%d-%m-%Y')
+        
+        context = {
+            'player_iri': player_iri,
+            'name': name,
+            'gender': gender,
+            'nationality': citizenship,
+            'birthdate': birthdate,
+            'birthplace': birthplace,
+            'country_name': country_name,
+            'birthplace_name': birthplace_name,
+            'team_list': team_list,
+            'is_valid': True,
+            'label': label
+        }
+        
+    return render(request, "player_detail.html", context)
+
+def show_team_detail(request, label):
+    context = {'is_valid': False, 'label': label} 
+    query_result = get_team_detail_by_label(label)
+    if query_result != None:
+        team_iri = query_result['team_iri']['value']
+        captain_iri = query_result['captain']['value']
+        league_iri = query_result['league']['value']
+        inception = query_result['inception']['value']
+        team_name = query_result['name']['value']
+        league_name = query_result['league_name']['value']
+        captain_name = query_result['captain_name']['value']
+
+        date_format = '%Y-%m-%dT%H:%M:%SZ'
+        datetime_object = datetime.strptime(inception, date_format)
+        inception = datetime_object.strftime('%Y')
+        context = {
+            'team_iri': team_iri,
+            'captain_iri': captain_iri,
+            'league_iri': league_iri,
+            'inception': inception,
+            'team_name': team_name,
+            'league_name': league_name,
+            'captain_name': captain_name,
+            'is_valid': True,
+            'label': label
+        }
+    return render(request, "team_detail.html", context)
+
+def show_venue_detail(request, label):
+    context = {'is_valid': False, 'label': label} 
+    query_result = get_venue_detail_by_label(label)
+    if query_result != None:
+        venue_iri = query_result['venue_iri']['value']
+        opening_date = query_result['opening_date']['value']
+        location_iri = query_result['location']['value']
+        country_iri = query_result['country']['value']
+        venue_name = query_result['name']['value']
+        country_name = query_result['country_name']['value']
+        location_name = query_result['location_name']['value']
+
+        date_format = '%Y-%m-%dT%H:%M:%SZ'
+        datetime_object = datetime.strptime(opening_date, date_format)
+        opening_date = datetime_object.strftime('%Y')
+        
+        context = {
+            'venue_iri': venue_iri,
+            'opening_date': opening_date,
+            'location_iri': location_iri,
+            'country_iri': country_iri,
+            'venue_name': venue_name,
+            'country_name': country_name,
+            'location_name': location_name,
+            'is_valid': True,
+            'label': label
+        }    
+    return render(request, "venue_detail.html", context)
