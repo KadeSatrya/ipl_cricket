@@ -34,7 +34,16 @@ def search_identifier(bindings):
     return result
 
 def search_detailed_matches(bindings):
-    result = graph.query(
+    allow_no_result = \
+        "player_label" not in bindings.keys() and \
+        "winner_label" not in bindings.keys()
+    if allow_no_result:
+        optional_start = "OPTIONAL {"
+        optional_end = "}"
+    else:
+        optional_start = ""
+        optional_end = ""
+    query_string = \
         """
         select distinct ?iri (substr(str(?iri), 22) as ?label) ?team1_label ?team2_label ?date_literal ?winner_label where {
         ?iri :city ?city.
@@ -42,6 +51,10 @@ def search_detailed_matches(bindings):
         ?iri :date ?date_literal.
         filter(?date_literal >= ?date_starts && ?date_literal <= ?date_ends)
         ?iri :dl_applied ?dl_literal.
+        %s
+        ?iri :player_of_match ?player.
+        ?player rdfs:label ?player_label.
+        %s
         ?iri :result ?result_literal.
         ?iri :season ?season_literal.
         ?iri :team ?team1.
@@ -57,16 +70,16 @@ def search_detailed_matches(bindings):
         ?iri :umpire ?umpire2.
         ?umpire2 rdfs:label ?umpire2_label.
         ?iri :venue ?venue.
-        ?venue rdfs:label ?venue_literal.
+        ?venue rdfs:label ?venue_label.
         ?iri :win_by_amount ?win_by_amount_literal.
         ?iri :win_by_type ?win_by_type_literal.
-        optional {
+        %s
         ?iri :winner ?winner.
         ?winner rdfs:label ?winner_label.
-        }
+        %s
         } order by ?date_literal
-        """
-    , initBindings=bindings)
+        """ % (optional_start, optional_end, optional_start, optional_end)
+    result = graph.query(query_string, initBindings=bindings)
     return result
 
 def get_iri_details(bindings):

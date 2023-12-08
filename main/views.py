@@ -7,9 +7,12 @@ properties = {
     "cities": "https://appname.here/data#city",
     "players": "https://appname.here/data#player_of_match",
     "teams": "https://appname.here/data#team",
-    "umpire": "https://appname.here/data#umpire",
+    "umpires": "https://appname.here/data#umpire",
     "venues": "https://appname.here/data#venue",
 }
+
+default_date_starts = Literal("2000-01-01", datatype=XSD.date)
+default_date_ends = Literal("2099-12-31", datatype=XSD.date)
 
 def show_search(request):
     context = {}
@@ -22,7 +25,11 @@ def show_general_result(request):
     if input == None or input == "":
         return redirect("main:show_search")
     if len(input.split()) == 1 and input == "matches":
-        result = search_detailed_matches({})
+        bindings = {
+            "date_starts": default_date_starts,
+            "date_ends": default_date_ends,
+        }
+        result = search_detailed_matches(bindings)
     elif len(input.split()) == 1 and input in properties.keys():
         bindings = {"property": URIRef(properties[input])}
         result = search_all_in_class(bindings) 
@@ -79,11 +86,11 @@ def show_detailed_result(request):
         if date_starts != "" and date_starts != None:
             bindings["date_starts"] = Literal(date_starts, datatype=XSD.date)
         else:
-            bindings["date_starts"] = Literal("2000-01-01", datatype=XSD.date)
+            bindings["date_starts"] = default_date_starts
         if date_ends != "" and date_ends != None:
             bindings["date_ends"] = Literal(date_ends, datatype=XSD.date)
         else:
-            bindings["date_starts"] = Literal("2099-12-31", datatype=XSD.date)
+            bindings["date_ends"] = default_date_ends
         if dl_applied != None:
             bindings["dl_literal"] = Literal(dl_applied, datatype=XSD.boolean)
         if player != "" and player != None:
