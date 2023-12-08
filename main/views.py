@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from rdflib import Literal, URIRef
 from rdflib.namespace import XSD
 from .queries import *
@@ -22,29 +22,6 @@ def show_search(request):
         context[property] = search_all_in_class({"property": URIRef(properties[property])})
     return render(request, 'search.html', context)
 
-def show_general_result(request):
-    input = request.GET.get("query")
-    if input == None or input == "":
-        return redirect("main:show_search")
-    if len(input.split()) == 1 and input == "matches":
-        bindings = {
-            "date_starts": default_date_starts,
-            "date_ends": default_date_ends,
-        }
-        result = search_detailed_matches(bindings)
-    elif len(input.split()) == 1 and input in properties.keys():
-        bindings = {"property": URIRef(properties[input])}
-        result = search_all_in_class(bindings) 
-    else:
-        bindings = {"identifier": Literal(input.lower())}
-        result = search_identifier(bindings)
-    context = {
-        "input": input,
-        "result": result,
-        "is_valid": True,
-    }
-    return render(request, 'result.html', context)
-
 def show_infobox(request):
     iri = request.GET.get("iri")
     label = request.GET.get("label")
@@ -53,11 +30,17 @@ def show_infobox(request):
     is_valid = True
     if len(iri_properties) == 0 and len(literal_properties) == 0:
         is_valid = False
+
+    properties = {}
+    for row in iri_properties:
+        properties[str(row.property).replace("_", " ").title()] = str(row.label)
+    for row in literal_properties:
+        properties[str(row.property).replace("_", " ").title()] = str(row.label)
+
     context = {
         "iri": iri,
         "label": label,
-        "iri_properties": iri_properties,
-        "literal_properties": literal_properties,
+        "properties": properties,
         "is_valid": is_valid,
     }
     return render(request, 'infobox.html', context)
