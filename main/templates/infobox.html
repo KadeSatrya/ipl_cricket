@@ -1,36 +1,114 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     {% if is_valid == False %}
-      <title>Invalid IRI</title>
+        <title>Invalid IRI</title>
     {% else %}
-      <title>{{ label }}</title>
+        <title>{{ label }}</title>
     {% endif %}
-  </head>
-  <body>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+        }
+
+        .info-box {
+            border: 1px solid #007BFF;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #007BFF;
+        }
+
+        b {
+            color: #007BFF;
+        }
+
+        .team-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #007BFF;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .team-names {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .versus {
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .venue-info,
+        .umpire-info,
+        .result-info {
+            margin-bottom: 10px;
+        }
+
+        .property-value {
+            color: #007BFF;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
     {% if is_valid == False %}
-      <h1>Invalid IRI</h1>
-      Data IRI is invalid. Please try again.
+        <h1>Invalid IRI</h1>
+        <p>Data IRI is invalid. Please try again.</p>
     {% else %}
-      <h1>{{ label }}</h1>
-      {% for prop_name, prop_value in properties.items %}
-        <b>{{ prop_name }}:</b>
-        {% if prop_name == "Player Of Match" %}
-          <a href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Team 1" or prop_name == "Team 2"  or prop_name == "Toss Winner" or prop_name == "Winner" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Venue" %}
-          <a href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
-        {% else %}
-          {{ prop_value }}
-        {% endif %}
-        <br>
-      {% endfor %}
+        <div class="info-box">
+            <h1>{{ label }}</h1>
+
+            <div class="team-box">
+                <div class="team-names">
+                    <b>Team 1:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_1 %}">{{ properties.Team_1 }}</a><br>
+                    <p class="versus">vs</p><br>
+                    <b>Team 2:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_2 %}">{{ properties.Team_2 }}</a><br>
+                    <p class="versus">{{ properties.Date }} <br>  {{ properties.Winner }} won by {{ properties.Win_By_Amount }} {{ properties.Win_By_Type }}</p>
+                </div>
+            </div>
+
+            <div class="venue-info">
+                <b>City:</b> {{ properties.City }}<br>
+                <b>Venue:</b> <a class="property-value" href="{% url 'main:show_venue_detail' properties.Venue %}">{{ properties.Venue }}</a>
+            </div>
+
+            <div class="umpire-info">
+                <b>Umpire 1:</b> {{ properties.Umpire_1 }}<br>
+                <b>Umpire 2:</b> {{ properties.Umpire_2 }}
+            </div>
+
+            <div class="result-info">
+                <b>Player of Match:</b>  <a class="property-value" href="{% url 'main:show_player_detail' properties.Player_Of_Match %}">{{ properties.Player_Of_Match }}</a><br>
+                <b>Toss:</b> <span class="property-value">{{ properties.Toss_Winner }} ({{ properties.Toss_Decision }})</span><br>
+            </div>
+
+            <div class="result-info">
+                <b>Dl Applied:</b> {{ properties.Dl_Applied }}<br>
+                <b>Result:</b> {{ properties.Result }}<br>
+                <b>Season:</b> {{ properties.Season }}<br>
+            </div>
+        </div>
     {% endif %}
+
     <br>
     <br>
     <form action="{% url 'main:show_search' %}" method="GET">
-      <button type="Submit">Search Again</button>
+        <button type="Submit">Search Again</button>
     </form>
-  </body>
+</body>
 </html>

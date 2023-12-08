@@ -1,42 +1,66 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    {% if is_valid == False %}
-      <title>No Player Found</title>
-    {% else %}
-      <title>{{ label }}</title>
-    {% endif %}
-  </head>
-  <body>
-    {% if is_valid == False %}
-      <h1>Invalid IRI</h1>
-      No Player found with label {{ label }}
-    {% else %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if is_valid == False %}
+    <title>No Player Found</title>
+  {% else %}
+    <title>{{ label }}</title>
+  {% endif %}
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    div {
+      margin-bottom: 10px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  {% if is_valid == False %}
+    <h1>Invalid IRI</h1>
+    <p>No player found with label {{ label }}</p>
+  {% else %}
     <div>
-        <h1>{{ name }}</h1>
+      <h1>{{ name }}</h1>
     </div>
     <div>
-        Gender: {{gender}}
+      Gender: {{ gender }}
     </div>
     <div>
-        Nationality: <a href="{{nationality}}">{{country_name}}</a>,
+      Nationality: <a href="{{ nationality }}">{{ country_name }}</a>
     </div>
     <div>
-        Born at <a href="{{birthplace}}">{{birthplace_name}}</a>, {{birthdate}}
+      Born at <a href="{{ birthplace }}">{{ birthplace_name }}</a>, {{ birthdate }}
     </div>
-      <div>Has played for:</div>
+    <div>Has played for:</div>
     {% for team_iri, team_name in team_list %}
-        <a href="{{team_iri}}">{{ team_name }}</a>
-        <br>
+      <a href="{{ team_iri }}">{{ team_name }}</a><br>
     {% endfor %}
     <br>
     <a href="{{ player_iri }}">More Details</a>
-    <br>
-    {% endif %}
-    <br>
-    <br>
-    <form action="{% url 'main:show_search' %}" method="GET">
-      <button type="Submit">Search Again</button>
-    </form>
-  </body>
+  {% endif %}
+  <br><br>
+  <form action="{% url 'main:show_search' %}" method="GET">
+    <button type="Submit">Search Again</button>
+  </form>
+</body>
 </html>
