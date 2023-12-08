@@ -16,11 +16,21 @@
         There are no items that match your input query. Please try again.
       {% else %}
         {% for item in result %}
+          <b>{{ item.label }}</b>
+          <br>
+          {% if item.team1_label %}
+            Teams: {{ item.team1_label }} vs {{ item.team2_label }}
+            <br>
+            Date: {{ item.date_literal }}
+            <br>
+            Winner: {{ item.winner_label }}
+            <br>
+          {% endif %}
           <!-- find better way to make link -->
           <form action="{% url 'main:show_infobox' %}" method="GET">
             <input type="hidden" id="iri" name="iri" value="{{ item.iri }}">
             <input type="hidden" id="label" name="label" value="{{ item.label }}">
-            <button type="Submit">{{ item.label }}</button>
+            <button type="Submit">See Details</button>
           </form>
           <br>
         {% endfor %}

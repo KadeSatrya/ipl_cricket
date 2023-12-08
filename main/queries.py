@@ -47,7 +47,7 @@ def search_identifier(bindings):
 def search_detailed_matches(bindings):
     result = graph.query(
         """
-        select distinct ?iri (substr(str(?iri), 22) as ?label) where {
+        select distinct ?iri (substr(str(?iri), 22) as ?label) ?date_literal ?team1_label ?team2_label ?winner_label where {
         ?iri :city ?city.
         ?city rdfs:label ?city_label.
         ?iri :date ?date_literal.
