@@ -1,21 +1,5 @@
 from .models import graph
 
-def search_all_in_matches():
-    result = graph.query(
-        """
-        select distinct ?iri (substr(str(?iri), 22) as ?label) ?team1_label ?team2_label ?date_literal where {
-        ?iri :team ?team1.
-        ?team1 rdfs:label ?team1_label.
-        ?iri :team ?team2.
-        ?team2 rdfs:label ?team2_label.
-        filter(?team1_label < ?team2_label)
-        ?iri :date ?date_literal.
-        }
-        order by ?date_literal
-        """
-    )
-    return result
-
 def search_all_in_class(bindings):
     result = graph.query(
         """
@@ -52,13 +36,11 @@ def search_identifier(bindings):
 def search_detailed_matches(bindings):
     result = graph.query(
         """
-        select distinct ?iri (substr(str(?iri), 22) as ?label) ?team1_label ?team2_label ?date_literal where {
+        select distinct ?iri (substr(str(?iri), 22) as ?label) ?team1_label ?team2_label ?date_literal ?winner_label where {
         ?iri :city ?city.
         ?city rdfs:label ?city_label.
         ?iri :date ?date_literal.
         ?iri :dl_applied ?dl_literal.
-        ?iri :player_of_match ?player.
-        ?player rdfs:label ?player_label.
         ?iri :result ?result_literal.
         ?iri :season ?season_literal.
         ?iri :team ?team1.
@@ -74,11 +56,13 @@ def search_detailed_matches(bindings):
         ?iri :umpire ?umpire2.
         ?umpire2 rdfs:label ?umpire2_label.
         ?iri :venue ?venue.
-        ?venue rdfs:label ?venue_label.
+        ?venue rdfs:label ?venue_literal.
         ?iri :win_by_amount ?win_by_amount_literal.
         ?iri :win_by_type ?win_by_type_literal.
+        optional {
         ?iri :winner ?winner.
         ?winner rdfs:label ?winner_label.
+        }
         } order by ?date_literal
         """
     , initBindings=bindings)
