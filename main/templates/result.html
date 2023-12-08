@@ -8,7 +8,7 @@
     <form action="{% url 'main:show_search' %}" method="GET">
         <button type="Submit">Search Again</button>
     </form>
-    <h3>Results for Query: {{ input }}</h3>
+    <h3>{{ result|length }} results found from query {{ input }}</h3>
     {% if is_valid == False %}
       Input query is invalid. Please try again with the correct syntax.
     {% else %}
@@ -22,6 +22,8 @@
             Teams: {{ item.team1_label }} vs {{ item.team2_label }}
             <br>
             Date: {{ item.date_literal }}
+            <br>
+            Winner: {{ item.winner_label }}
             <br>
           {% endif %}
           <!-- find better way to make link -->
