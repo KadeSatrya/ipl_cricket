@@ -14,6 +14,8 @@
 
         h1 {
             color: #007BFF;
+            border-bottom: 2px solid #007BFF; /* Add border to the bottom of h1 */
+            padding-bottom: 10px; /* Add padding to the bottom of h1 */
         }
 
         p {
@@ -43,6 +45,19 @@
         .property-container {
             margin-bottom: 20px;
         }
+
+        /* Add border and padding to the links */
+        a {
+            border-bottom: 1px solid #007BFF;
+            padding-bottom: 2px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        /* Add padding to the property values */
+        .property-value {
+            padding-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -52,21 +67,18 @@
     {% else %}
       <h1>{{ label }}</h1>
       {% for prop_name, prop_value in properties.items %}
-        <b>{{ prop_name }}:</b>
-        {% if prop_name == "Player Of Match" %}
-          <a href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Team" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Venue" %}
-          <a href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Toss Winner" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-        {% elif prop_name == "Winner" %}
-          <a href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-        {% else %}
-          {{ prop_value }}
-        {% endif %}
-        <br>
+        <div class="property-container">
+          <b class="property-name">{{ prop_name }}:</b>
+          {% if prop_name == "Player Of Match" %}
+            <a class="property-value" href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
+          {% elif prop_name == "Team 1" or prop_name == "Team 2"  or prop_name == "Toss Winner" or prop_name == "Winner" %}
+            <a class="property-value" href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
+          {% elif prop_name == "Venue" %}
+            <a class="property-value" href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
+          {% else %}
+            <span class="property-value">{{ prop_value }}</span>
+          {% endif %}
+        </div>
       {% endfor %}
     {% endif %}
 
