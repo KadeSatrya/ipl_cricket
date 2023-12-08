@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ label }}</title>
+  </head>
+  <body>
+    <h1>{{ label }}</h1>
+    {% for row in iri_properties %}
+      <b>{{ row.property }}:</b>
+      <!-- find better way to make link -->
+      <form action="{% url 'main:show_infobox' %}" method="GET">
+        <input type="hidden" id="iri" name="iri" value="{{ row.iri }}">
+        <input type="hidden" id="label" name="label" value="{{ row.label }}">
+        <button type="Submit">{{ row.label }}</button>
+      </form>
+      <br>
+    {% endfor %}
+    {% for row in literal_properties %}
+      <b>{{ row.property }}:</b> {{ row.literal }}
+      <br>
+    {% endfor %}
+    <br>
+    <form action="{% url 'main:show_search' %}" method="GET">
+      <button type="Submit">Search Again</button>
+    </form>
+  </body>
+</html>
