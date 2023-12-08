@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IPL Matches Search</title>
+  </head>
+  <body>
+    <h1>Indian Premier League Matches Search Box</h1>
+
+    <h2>General Search:</h2>
+    <form action="{% url 'main:show_general_result' %}" method="GET">
+        <label for="query">Enter query here:</label>
+        <input id="query" name="query" type="text">
+        <button type="Submit">Search</button>
+    </form>
+
+    <h3>How to Search:</h3>
+    <ul>
+      <li>To find all items in a class, type <b>[class_name]</b> (available class names: "cities", "matches", "players", "teams", "umpires", "venues").</li>
+      <li><i>e.g. type [cities] to find all cities recorded in the dataset.</i></li>
+      <li>To find items from all classes whose identifier contains a substring, type <b>[substring]</b>.</li>
+      <li><i>e.g. type [stadium] to find all items whose name contain the substring "stadium".</i></li>
+    </ul>
+
+    <h2>Detailed Search for Matches:</h2>
+    <form action="{% url 'main:show_detailed_result' %}" method="GET">
+      
+      <label for="city">City:</label>
+      <input id="city" name="city" list="cities">
+      <datalist id="cities">
+        {% for city in cities %}
+          <option value="{{ city.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      Duckworth-Lewis Method Applied:
+      <br>
+      <input id="true" name="dl_applied" type="radio" value="1">
+      <label for="true">True</label>
+      <br>
+      <input id="false" name="dl_applied" type="radio" value="0">
+      <label for="false">False</label>
+      <br>
+
+      <label for="player">Player of Match:</label>
+      <input id="player" name="player" list="players">
+      <datalist id="players">
+        {% for player in players %}
+          <option value="{{ player.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      Result:
+      <br>
+      <input id="normal" name="result" type="radio" value="normal">
+      <label for="normal">Normal</label>
+      <br>
+      <input id="tie" name="result" type="radio" value="tie">
+      <label for="tie">Tie</label>
+      <br>
+      <input id="no result" name="result" type="radio" value="no result">
+      <label for="no result">No Result</label>
+      <br>
+
+      <label for="season">Season:</label>
+      <input id="season" name="season" type="number" min="2000" max="2099" step="1">
+      <br>
+
+      <label for="team1">Team 1:</label>
+      <input id="team1" name="team1" list="teams">
+      <datalist id="teams">
+        {% for team in teams %}
+          <option value="{{ team.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <label for="team2">Team 2:</label>
+      <input id="team2" name="team2" list="teams">
+      <datalist id="teams">
+        {% for team in teams %}
+          <option value="{{ team.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      Toss Decision:
+      <br>
+      <input id="bat" name="toss_decision" type="radio" value="bat">
+      <label for="bat">Bat</label>
+      <br>
+      <input id="field" name="toss_decision" type="radio" value="field">
+      <label for="field">Field</label>
+      <br>
+
+      <label for="toss_winner">Toss Winner:</label>
+      <input id="toss_winner" name="toss_winner" list="teams">
+      <datalist id="teams">
+        {% for team in teams %}
+          <option value="{{ team.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <label for="umpire1">Umpire 1:</label>
+      <input id="umpire1" name="umpire1" list="umpires">
+      <datalist id="umpires">
+        {% for umpire in umpires %}
+          <option value="{{ umpire.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <label for="umpire2">Umpire 2:</label>
+      <input id="umpire2" name="umpire2" list="umpires">
+      <datalist id="umpires">
+        {% for umpire in umpires %}
+          <option value="{{ umpire.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <label for="venue">Venue:</label>
+      <input id="venue" name="venue" list="venues">
+      <datalist id="venues">
+        {% for venue in venues %}
+          <option value="{{ venue.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <label for="win_by_amount">Win by Amount:</label>
+      <input id="win_by_amount" name="win_by_amount" type="number" min="0" max="1000" step="1">
+      <br>
+
+      Win by Type:
+      <br>
+      <input id="runs" name="win_by_type" type="radio" value="runs">
+      <label for="runs">Runs</label>
+      <br>
+      <input id="wickets" name="win_by_type" type="radio" value="wickets">
+      <label for="wickets">Wickets</label>
+      <br>
+      <input id="neither" name="win_by_type" type="radio" value="neither">
+      <label for="neither">Neither</label>
+      <br>
+
+      <label for="winner">Winner:</label>
+      <input id="winner" name="winner" list="teams">
+      <datalist id="teams">
+        {% for team in teams %}
+          <option value="{{ team.label }}"></option>
+        {% endfor %}
+      </datalist>
+      <br>
+
+      <br>
+      <button type="Submit">Search</button>
+    </form>
+  </body>
+</html>

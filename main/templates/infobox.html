@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% if is_valid == False %}
+      <title>Invalid IRI</title>
+    {% else %}
+      <title>{{ label }}</title>
+    {% endif %}
+  </head>
+  <body>
+    {% if is_valid == False %}
+      <h1>Invalid IRI</h1>
+      Data IRI is invalid. Please try again.
+    {% else %}
+      <h1>{{ label }}</h1>
+      {% for row in iri_properties %}
+        <b>{{ row.property }}:</b>
+        <!-- find better way to make link -->
+        <form action="{% url 'main:show_infobox' %}" method="GET">
+          <input type="hidden" id="iri" name="iri" value="{{ row.iri }}">
+          <input type="hidden" id="label" name="label" value="{{ row.label }}">
+          <button type="Submit">{{ row.label }}</button>
+        </form>
+        <br>
+      {% endfor %}
+      {% for row in literal_properties %}
+        <b>{{ row.property }}:</b> {{ row.literal }}
+        <br>
+      {% endfor %}
+    {% endif %}
+    <br>
+    <br>
+    <form action="{% url 'main:show_search' %}" method="GET">
+      <button type="Submit">Search Again</button>
+    </form>
+  </body>
+</html>
