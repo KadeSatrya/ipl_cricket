@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% if is_valid == False %}
+      <title>No Player Found</title>
+    {% else %}
+      <title>{{ label }}</title>
+    {% endif %}
+  </head>
+  <body>
+    {% if is_valid == False %}
+      <h1>Invalid IRI</h1>
+      No Player found with label {{ label }}
+    {% else %}
+    <div>
+        <h1>{{ name }}</h1>
+    </div>
+    <div>
+        Gender: {{gender}}
+    </div>
+    <div>
+        Nationality: <a href="{{nationality}}">{{country_name}}</a>,
+    </div>
+    <div>
+        Born at <a href="{{birthplace}}">{{birthplace_name}}</a>, {{birthdate}}
+    </div>
+      <div>Has played for:</div>
+    {% for team_iri, team_name in team_list %}
+        <a href="{{team_iri}}">{{ team_name }}</a>
+        <br>
+    {% endfor %}
+    <br>
+    <a href="{{ player_iri }}">More Details</a>
+    <br>
+    {% endif %}
+    <br>
+    <br>
+    <form action="{% url 'main:show_search' %}" method="GET">
+      <button type="Submit">Search Again</button>
+    </form>
+  </body>
+</html>
