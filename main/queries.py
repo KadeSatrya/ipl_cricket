@@ -40,6 +40,7 @@ def search_detailed_matches(bindings):
         ?iri :city ?city.
         ?city rdfs:label ?city_label.
         ?iri :date ?date_literal.
+        filter(?date_literal >= ?date_starts && ?date_literal <= ?date_ends)
         ?iri :dl_applied ?dl_literal.
         ?iri :result ?result_literal.
         ?iri :season ?season_literal.
