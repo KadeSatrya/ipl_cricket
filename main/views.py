@@ -33,7 +33,7 @@ def show_infobox(request):
 
     properties = {}
     for row in iri_properties:
-        property_name = str(row.property).replace("_", " ").title()
+        property_name = str(row.property).replace(" ", "_").title()
         property_value = str(row.label)
         if property_name in properties.keys():
             first_value = properties.pop(property_name)
@@ -42,9 +42,10 @@ def show_infobox(request):
         else:
             properties[property_name] = property_value
     for row in literal_properties:
-        property_name = str(row.property).replace("_", " ").title()
+        property_name = str(row.property).replace(" ", "_").title()
         property_value = str(row.label)
         properties[property_name] = property_value
+    properties = {key.replace(' ', '_'): value for key, value in properties.items()}
 
     context = {
         "iri": iri,
@@ -52,6 +53,7 @@ def show_infobox(request):
         "properties": properties,
         "is_valid": is_valid,
     }
+    print(properties)
     return render(request, 'infobox.html', context)
 
 def show_detailed_result(request):
