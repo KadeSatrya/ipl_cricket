@@ -33,9 +33,18 @@ def show_infobox(request):
 
     properties = {}
     for row in iri_properties:
-        properties[str(row.property).replace("_", " ").title()] = str(row.label)
+        property_name = str(row.property).replace("_", " ").title()
+        property_value = str(row.label)
+        if property_name in properties.keys():
+            first_value = properties.pop(property_name)
+            properties[f"{property_name} 1"] = first_value
+            properties[f"{property_name} 2"] = property_value
+        else:
+            properties[property_name] = property_value
     for row in literal_properties:
-        properties[str(row.property).replace("_", " ").title()] = str(row.label)
+        property_name = str(row.property).replace("_", " ").title()
+        property_value = str(row.label)
+        properties[property_name] = property_value
 
     context = {
         "iri": iri,
