@@ -53,7 +53,6 @@ def show_infobox(request):
         "properties": properties,
         "is_valid": is_valid,
     }
-    print(properties)
     return render(request, 'infobox.html', context)
 
 def show_detailed_result(request):

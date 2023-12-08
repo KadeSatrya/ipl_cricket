@@ -78,8 +78,10 @@
                     <b>Team 1:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_1 %}">{{ properties.Team_1 }}</a><br>
                     <p class="versus">vs</p><br>
                     <b>Team 2:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_2 %}">{{ properties.Team_2 }}</a><br>
+                    {% if properties.Result != "no result" %}
                     <p class="versus">{{ properties.Date }} <br>  {{ properties.Winner }} won by {{ properties.Win_By_Amount }} {{ properties.Win_By_Type }}</p>
-                </div>
+                    {% endif %}
+                  </div>
             </div>
 
             <div class="venue-info">
@@ -93,8 +95,10 @@
             </div>
 
             <div class="result-info">
+                {% if properties.Result != "no result" %}
                 <b>Player of Match:</b>  <a class="property-value" href="{% url 'main:show_player_detail' properties.Player_Of_Match %}">{{ properties.Player_Of_Match }}</a><br>
-                <b>Toss:</b> <span class="property-value">{{ properties.Toss_Winner }} ({{ properties.Toss_Decision }})</span><br>
+                {% endif %}
+                <b>Toss Winner:</b> <span class="property-value">{{ properties.Toss_Winner }} ({{ properties.Toss_Decision }})</span><br>
             </div>
 
             <div class="result-info">
