@@ -9,38 +9,50 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-image: url('https://wallpaperaccess.in/public/uploads/preview/cricket-sport-wallpapers-7.jpg');
-            background-size: cover; /* Ensure the background covers the entire viewport */
-            background-repeat: no-repeat; /* Prevent background image from repeating */
-            background-position: center; /* Center the background image */
-      
-        
+            margin: 20px;
         }
 
-        .content-box {
-            max-width: 600px;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-            background-color: #fff; /* Add a white background */
+        .info-box {
+            border: 1px solid #007BFF;
+            padding: 10px;
+            margin-bottom: 20px;
         }
 
         h1 {
             color: #007BFF;
-            border-bottom: 2px solid #007BFF;
-            padding-bottom: 10px;
-        }
-
-        p {
-            color: #6C757D;
         }
 
         b {
+            color: #007BFF;
+        }
+
+        .team-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #007BFF;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .team-names {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .versus {
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+
+        .venue-info,
+        .umpire-info,
+        .result-info {
+            margin-bottom: 10px;
+        }
+
+        .property-value {
             color: #007BFF;
         }
 
@@ -51,59 +63,52 @@
             border: none;
             cursor: pointer;
         }
-
-        .link-button {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .property-container {
-            margin-bottom: 20px;
-        }
-
-        a {
-            border-bottom: 1px solid #007BFF;
-            padding-bottom: 2px;
-            text-decoration: none;
-            color: #007BFF;
-        }
-
-        .property-value {
-            padding-right: 10px;
-        }
     </style>
 </head>
 <body>
-    <div class="content-box">
-        {% if is_valid == False %}
-            <h1>Invalid IRI</h1>
-            <p>Data IRI is invalid. Please try again.</p>
-        {% else %}
+    {% if is_valid == False %}
+        <h1>Invalid IRI</h1>
+        <p>Data IRI is invalid. Please try again.</p>
+    {% else %}
+        <div class="info-box">
             <h1>{{ label }}</h1>
-            {% for prop_name, prop_value in properties.items %}
-                <div class="property-container">
-                    <b class="property-name">{{ prop_name }}:</b>
-                    {% if prop_name == "Player Of Match" %}
-                        <a class="property-value" href="{% url 'main:show_player_detail' prop_value %}">{{ prop_value }}</a>
-                    {% elif prop_name == "Team 1" or prop_name == "Team 2"  or prop_name == "Toss Winner" or prop_name == "Winner" %}
-                        <a class="property-value" href="{% url 'main:show_team_detail' prop_value %}">{{ prop_value }}</a>
-                    {% elif prop_name == "Venue" %}
-                        <a class="property-value" href="{% url 'main:show_venue_detail' prop_value %}">{{ prop_value }}</a>
-                    {% else %}
-                        <span class="property-value">{{ prop_value }}</span>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% endif %}
 
-        <br>
-        <br>
-        <form action="{% url 'main:show_search' %}" method="GET">
-            <button type="Submit">Search Again</button>
-        </form>
-    </div>
+            <div class="team-box">
+                <div class="team-names">
+                    <b>Team 1:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_1 %}">{{ properties.Team_1 }}</a><br>
+                    <p class="versus">vs</p><br>
+                    <b>Team 2:</b> <a class="property-value" href="{% url 'main:show_team_detail' properties.Team_2 %}">{{ properties.Team_2 }}</a><br>
+                    <p class="versus">{{ properties.Date }} <br>  {{ properties.Winner }} won by {{ properties.Win_By_Amount }} {{ properties.Win_By_Type }}</p>
+                </div>
+            </div>
+
+            <div class="venue-info">
+                <b>City:</b> {{ properties.City }}<br>
+                <b>Venue:</b> <a class="property-value" href="{% url 'main:show_venue_detail' properties.Venue %}">{{ properties.Venue }}</a>
+            </div>
+
+            <div class="umpire-info">
+                <b>Umpire 1:</b> {{ properties.Umpire_1 }}<br>
+                <b>Umpire 2:</b> {{ properties.Umpire_2 }}
+            </div>
+
+            <div class="result-info">
+                <b>Player of Match:</b>  <a class="property-value" href="{% url 'main:show_player_detail' properties.Player_Of_Match %}">{{ properties.Player_Of_Match }}</a><br>
+                <b>Toss:</b> <span class="property-value">{{ properties.Toss_Winner }} ({{ properties.Toss_Decision }})</span><br>
+            </div>
+
+            <div class="result-info">
+                <b>Dl Applied:</b> {{ properties.Dl_Applied }}<br>
+                <b>Result:</b> {{ properties.Result }}<br>
+                <b>Season:</b> {{ properties.Season }}<br>
+            </div>
+        </div>
+    {% endif %}
+
+    <br>
+    <br>
+    <form action="{% url 'main:show_search' %}" method="GET">
+        <button type="Submit">Search Again</button>
+    </form>
 </body>
 </html>
